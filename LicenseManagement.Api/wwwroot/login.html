@@ -1,0 +1,462 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | License Management System</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: #f4f6f9;
+            color: #334155;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        :focus-visible {
+            outline: 2px solid #1976d2;
+            outline-offset: 2px;
+        }
+
+        .navbar {
+            background: #fff;
+            padding: 18px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,.04);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #172c46;
+            font-size: 17px;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .home-link {
+            color: #1976d2;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+            .home-link:hover {
+                text-decoration: underline;
+            }
+
+        .main-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 50px 20px;
+        }
+
+        .login-card {
+            width: 100%;
+            max-width: 460px;
+            background: #fff;
+            padding: 42px;
+            border-radius: 16px;
+            box-shadow: 0 10px 35px rgba(0,0,0,.07);
+        }
+
+        .login-icon {
+            width: 65px;
+            height: 65px;
+            margin: 0 auto 20px;
+            background: #e3f2fd;
+            color: #1976d2;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-heading {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+            .login-heading h1 {
+                color: #172c46;
+                font-size: 27px;
+                margin-bottom: 10px;
+            }
+
+            .login-heading p {
+                color: #64748b;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+            .form-group label {
+                display: block;
+                color: #334155;
+                font-size: 13px;
+                font-weight: 600;
+                margin-bottom: 8px;
+            }
+
+            .form-group input {
+                width: 100%;
+                height: 48px;
+                padding: 0 14px;
+                border: 1px solid #cbd5e1;
+                border-radius: 8px;
+                font-size: 14px;
+                color: #334155;
+                outline: none;
+                transition: .2s;
+            }
+
+                .form-group input:focus {
+                    border-color: #1976d2;
+                    box-shadow: 0 0 0 3px rgba(25,118,210,.1);
+                }
+
+        .hint {
+            color: #94a3b8;
+            font-size: 12px;
+            margin-top: 6px;
+        }
+
+        .password-wrapper {
+            position: relative;
+        }
+
+            .password-wrapper input {
+                padding-right: 65px;
+            }
+
+        .toggle-password {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #1976d2;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .link-button {
+            background: none;
+            border: none;
+            padding: 0;
+            color: #1976d2;
+            font: inherit;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+            .link-button:hover {
+                text-decoration: underline;
+            }
+
+        .field-link {
+            text-align: right;
+            margin: -8px 0 20px;
+        }
+
+        .message {
+            display: none;
+            padding: 12px 14px;
+            margin-bottom: 18px;
+            border-radius: 8px;
+            font-size: 13px;
+            line-height: 1.5;
+            background: #fef2f2;
+            color: #b91c1c;
+        }
+
+            .message.show {
+                display: block;
+            }
+
+            .message.success {
+                background: #f0fdf4;
+                color: #15803d;
+            }
+
+        .demo-box {
+            border: 1px dashed #93c5fd;
+            background: #f0f7ff;
+            border-radius: 10px;
+            padding: 14px 16px;
+            margin-bottom: 22px;
+        }
+
+            .demo-box strong {
+                color: #172c46;
+                font-size: 14px;
+            }
+
+            .demo-box p {
+                color: #64748b;
+                font-size: 12px;
+                line-height: 1.6;
+                margin: 4px 0 10px;
+            }
+
+        .demo-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .demo-btn {
+            background: #fff;
+            border: 1px solid #bfdbfe;
+            border-radius: 8px;
+            padding: 9px 10px;
+            text-align: left;
+            cursor: pointer;
+            font: inherit;
+            font-size: 13px;
+            font-weight: 600;
+            color: #1976d2;
+        }
+
+            .demo-btn:hover {
+                background: #e3f2fd;
+            }
+
+            .demo-btn span {
+                display: block;
+                margin-top: 2px;
+                font-size: 11px;
+                font-weight: 400;
+                color: #64748b;
+            }
+
+        .btn-login {
+            width: 100%;
+            height: 49px;
+            background: #1976d2;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: .3s;
+        }
+
+            .btn-login:hover {
+                background: #125bb0;
+            }
+
+            .btn-login:disabled {
+                background: #94a3b8;
+                cursor: not-allowed;
+            }
+
+        .register-text {
+            text-align: center;
+            margin-top: 25px;
+            color: #64748b;
+            font-size: 13px;
+        }
+
+            .register-text a {
+                color: #1976d2;
+                font-weight: 600;
+                text-decoration: none;
+            }
+
+                .register-text a:hover {
+                    text-decoration: underline;
+                }
+
+        .divider {
+            height: 1px;
+            background: #edf0f4;
+            margin: 25px 0 18px;
+        }
+
+        .back-home {
+            display: block;
+            text-align: center;
+            color: #64748b;
+            font-size: 13px;
+            text-decoration: none;
+        }
+
+            .back-home:hover {
+                color: #1976d2;
+            }
+
+        .footer {
+            background: #172c46;
+            color: #cbd5e1;
+            text-align: center;
+            padding: 22px;
+            font-size: 12px;
+        }
+
+        @media (max-width: 600px) {
+            .navbar {
+                padding: 15px 20px;
+            }
+
+            .brand {
+                font-size: 14px;
+            }
+
+            .login-card {
+                padding: 30px 22px;
+            }
+
+            .login-heading h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="navbar">
+        <a href="/index.html" class="brand">
+            <svg width="28" height="28" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="7" fill="#1976d2" /><path d="M10 9h12v14H10z" fill="none" stroke="#fff" stroke-width="2" /><path d="M13 14h6M13 18h4" stroke="#fff" stroke-width="2" /></svg>
+            <span>License Management System</span>
+        </a>
+        <a href="/index.html" class="home-link">&larr; Back to Home</a>
+    </header>
+
+    <main class="main-container">
+        <div class="login-card">
+
+            <div class="login-icon">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2" /><path d="M8 11V8a4 4 0 0 1 8 0v3" /></svg>
+            </div>
+
+            <!-- ===== LOGIN ===== -->
+            <div id="loginView">
+                <div class="login-heading">
+                    <h1>Welcome back</h1>
+                    <p>Sign in to submit and track your license applications.</p>
+                </div>
+
+                <div id="loginMessage" class="message" role="alert"></div>
+
+                <div class="demo-box">
+                    <strong>Try the demo</strong>
+                    <p>Sample accounts with sample data. Anyone can see these passwords, so never enter real information.</p>
+                    <div class="demo-actions">
+                        <button type="button" class="demo-btn" data-user="trader_demo" data-pass="DemoTrader1">Sign in as trader<span>trader_demo / DemoTrader1</span></button>
+                        <button type="button" class="demo-btn" data-user="officer_demo" data-pass="DemoOfficer1">Sign in as officer<span>officer_demo / DemoOfficer1</span></button>
+                    </div>
+                </div>
+
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" name="username" placeholder="Enter your username" autocomplete="username" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <div class="password-wrapper">
+                            <input type="password" id="password" name="password" placeholder="Enter your password" autocomplete="current-password" required>
+                            <button type="button" class="toggle-password" data-target="password">Show</button>
+                        </div>
+                    </div>
+
+                    <div class="field-link">
+                        <button type="button" class="link-button" id="showChange">Change password</button>
+                    </div>
+
+                    <button type="submit" class="btn-login" id="loginButton">Sign In</button>
+                </form>
+
+                <div class="register-text">
+                    Don't have an account? <a href="/register.html">Create Account</a>
+                </div>
+                <div class="divider"></div>
+                <a href="/index.html" class="back-home">Back to Home</a>
+            </div>
+
+            <!-- ===== CHANGE PASSWORD ===== -->
+            <div id="changeView" class="hidden">
+                <div class="login-heading">
+                    <h1>Change password</h1>
+                    <p>Enter your current password, then choose a new one.</p>
+                </div>
+
+                <div id="changeMessage" class="message" role="alert"></div>
+
+                <form id="changeForm">
+                    <div class="form-group">
+                        <label for="cpUsername">Username</label>
+                        <input type="text" id="cpUsername" placeholder="Enter your username" autocomplete="username" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="oldPassword">Current password</label>
+                        <div class="password-wrapper">
+                            <input type="password" id="oldPassword" autocomplete="current-password" required>
+                            <button type="button" class="toggle-password" data-target="oldPassword">Show</button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="newPassword">New password</label>
+                        <div class="password-wrapper">
+                            <input type="password" id="newPassword" autocomplete="new-password" required>
+                            <button type="button" class="toggle-password" data-target="newPassword">Show</button>
+                        </div>
+                        <div class="hint">At least 8 characters, with uppercase, lowercase and a number.</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirm new password</label>
+                        <div class="password-wrapper">
+                            <input type="password" id="confirmPassword" autocomplete="new-password" required>
+                            <button type="button" class="toggle-password" data-target="confirmPassword">Show</button>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-login" id="changeButton">Change password</button>
+                </form>
+
+                <div class="register-text">
+                    <button type="button" class="link-button" id="showLogin">Back to sign in</button>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="footer">
+        &copy; <span id="year"></span> License Management System
+    </footer>
+
+    <script src="/js/config.js"></script>
+    <script src="/js/login.js"></script>
+</body>
+</html>

@@ -1,0 +1,695 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Applications | License Management System</title>
+    <!--<link rel="stylesheet" href="/css/layout.css">
+    <script src="/js/auth.js"></script>
+    <script>checkLogin();</script>-->
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 30px;
+            background: #f5f7fb;
+            font-family: Segoe UI, Arial, sans-serif;
+            color: #1f2937;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .container {
+            max-width: 1500px;
+            margin: auto;
+        }
+
+        .card {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,.08);
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+
+        .header-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .page-title {
+            margin: 0;
+        }
+
+        .subtitle {
+            color: #64748b;
+            margin: 6px 0 0;
+        }
+
+        /* SUMMARY CARDS */
+        .summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 14px;
+            margin-bottom: 20px;
+        }
+
+        .stat {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,.08);
+            padding: 16px 18px;
+            border: 2px solid transparent;
+            border-left: 6px solid var(--c);
+            cursor: pointer;
+            text-align: left;
+            font: inherit;
+            color: inherit;
+        }
+
+            .stat:hover {
+                background: #f8fafc;
+            }
+
+            .stat.active {
+                border-color: var(--c);
+            }
+
+            .stat:focus-visible, .action-btn:focus-visible, th.sortable:focus-visible {
+                outline: 2px solid #1976d2;
+                outline-offset: 2px;
+            }
+
+        .stat-num {
+            font-size: 30px;
+            font-weight: 700;
+            line-height: 1.1;
+        }
+
+        .stat-label {
+            color: #64748b;
+            font-size: 13px;
+            margin-top: 4px;
+        }
+
+        .stat-note {
+            font-size: 12px;
+            margin-top: 2px;
+            color: #dc2626;
+            min-height: 16px;
+        }
+
+        /* FILTERS */
+        .filters {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+            gap: 12px;
+            align-items: end;
+            margin-bottom: 12px;
+        }
+
+            .filters label {
+                display: block;
+                color: #64748b;
+                font-size: 13px;
+                margin-bottom: 6px;
+            }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 14px;
+            background: #fff;
+        }
+
+            input:focus, select:focus {
+                outline: none;
+                border-color: #1976d2;
+                box-shadow: 0 0 0 2px rgba(25,118,210,.1);
+            }
+
+        .search-wide {
+            grid-column: span 2;
+        }
+
+        .toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .toolbar-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .result-count {
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        /* TABLE */
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            min-width: 1100px;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #1976d2;
+            color: #fff;
+            padding: 12px;
+            text-align: left;
+            white-space: nowrap;
+        }
+
+            th.sortable {
+                cursor: pointer;
+                user-select: none;
+            }
+
+                th.sortable:hover {
+                    background: #125bb0;
+                }
+
+            th .arrow {
+                display: inline-block;
+                width: 14px;
+                font-size: 11px;
+                opacity: .9;
+            }
+
+        td {
+            border: 1px solid #e5e7eb;
+            padding: 10px;
+            font-size: 14px;
+            vertical-align: middle;
+        }
+
+        tbody tr:hover {
+            background: #f8fafc;
+        }
+
+        tbody td:first-child {
+            border-left: 5px solid var(--bar, #e5e7eb);
+        }
+
+        .table-empty {
+            text-align: center;
+            color: #94a3b8;
+            padding: 30px;
+        }
+
+        .table-error {
+            text-align: center;
+            color: #dc2626;
+            padding: 30px;
+        }
+
+        /* BUTTONS */
+        .btn-primary, .btn-ghost {
+            display: inline-block;
+            border-radius: 6px;
+            padding: 9px 16px;
+            font-size: 14px;
+            text-decoration: none;
+            cursor: pointer;
+            border: 1px solid #1976d2;
+        }
+
+        .btn-primary {
+            background: #1976d2;
+            color: #fff;
+        }
+
+            .btn-primary:hover {
+                background: #125bb0;
+            }
+
+        .btn-ghost {
+            background: #fff;
+            color: #1976d2;
+        }
+
+            .btn-ghost:hover {
+                background: #eff6ff;
+            }
+
+        .action-btn {
+            display: inline-block;
+            padding: 6px 12px;
+            margin-right: 4px;
+            border-radius: 6px;
+            font-size: 13px;
+            color: #fff;
+            text-decoration: none;
+            background: #1976d2;
+            white-space: nowrap;
+        }
+
+            .action-btn:hover {
+                background: #125bb0;
+            }
+
+            .action-btn.edit {
+                background: #6b7280;
+            }
+
+                .action-btn.edit:hover {
+                    background: #4b5563;
+                }
+
+            .action-btn.cert {
+                background: #2e7d32;
+            }
+
+                .action-btn.cert:hover {
+                    background: #1b5e20;
+                }
+
+            .action-btn.work {
+                background: #ea580c;
+            }
+
+                .action-btn.work:hover {
+                    background: #c2410c;
+                }
+
+        /* BADGES */
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .status-draft {
+            background: #e5e7eb;
+            color: #374151;
+        }
+
+        .status-submitted {
+            background: #cffafe;
+            color: #0e7490;
+        }
+
+        .status-review {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .status-edit {
+            background: #fef3c7;
+            color: #b45309;
+        }
+
+        .status-edited {
+            background: #ede9fe;
+            color: #6d28d9;
+        }
+
+        .status-approved {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .status-rejected {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .license-tag {
+            display: inline-block;
+            margin-left: 6px;
+            padding: 1px 8px;
+            border-radius: 10px;
+            font-size: 11px;
+            background: #fef3c7;
+            color: #b45309;
+        }
+
+        .aging {
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+            .aging.warn {
+                color: #b45309;
+            }
+
+            .aging.late {
+                color: #dc2626;
+            }
+
+            .aging.none {
+                color: #94a3b8;
+                font-weight: 400;
+            }
+
+        /* PAGINATION */
+        .pager {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 14px;
+        }
+
+        .pager-nav {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .pager button {
+            padding: 6px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            background: #fff;
+            cursor: pointer;
+            font: inherit;
+            font-size: 13px;
+        }
+
+            .pager button:disabled {
+                opacity: .45;
+                cursor: default;
+            }
+
+        .pager select {
+            width: auto;
+            padding: 6px;
+        }
+        .layout {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+        }
+
+        .main {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .sidebar {
+            width: 210px;
+            flex-shrink: 0;
+            position: sticky;
+            top: 100px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,.08);
+            padding: 20px 16px;
+        }
+
+        .sidebar-title {
+            text-align: center;
+            font-size: 22px;
+            font-weight: 700;
+            color: #1976d2;
+            margin-bottom: 18px;
+        }
+
+        .type-btn {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 12px;
+            padding: 12px 14px;
+            border: 0;
+            border-radius: 8px;
+            background: var(--c);
+            color: #fff;
+            font: inherit;
+            font-size: 16px;
+            cursor: pointer;
+            opacity: .72;
+            box-shadow: 0 2px 6px rgba(0,0,0,.18);
+        }
+
+            .type-btn:hover {
+                opacity: .9;
+            }
+
+            .type-btn.active {
+                opacity: 1;
+                box-shadow: 0 0 0 3px rgba(0,0,0,.18);
+            }
+
+            .type-btn .cnt {
+                background: rgba(255,255,255,.3);
+                border-radius: 10px;
+                padding: 0 8px;
+                font-size: 13px;
+            }
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+
+            .card {
+                padding: 16px;
+            }
+
+            .search-wide {
+                grid-column: auto;
+            }
+
+            #traderArea, #traderArea .btn-primary {
+                width: 100%;
+                text-align: center;
+            }
+            .layout {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                position: static;
+            }
+
+            #typeButtons {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 8px;
+            }
+
+            .type-btn {
+                margin-bottom: 0;
+            }
+        }
+        /* ===== ขยายหน้าให้กว้าง ไม่ต้องเลื่อนซ้าย-ขวา ===== */
+        body {
+            padding: 20px 24px;
+        }
+
+        .container {
+            max-width: none;
+        }
+
+        .card {
+            padding: 18px;
+        }
+
+        .main {
+            width: 100%;
+        }
+
+        table {
+            min-width: 0;
+        }
+
+        th {
+            padding: 10px 8px;
+            font-size: 13px;
+        }
+
+        td {
+            padding: 8px;
+            font-size: 13px;
+        }
+
+        /* คอลัมน์สั้นไม่ตัดบรรทัด ส่วนข้อความยาวให้ตัดได้ */
+        .c-no, .c-trid, .c-submitted, .c-aging, .c-dateappv, .c-action {
+            white-space: nowrap;
+        }
+
+        .c-companyname {
+            min-width: 140px;
+        }
+
+        .c-remark {
+            min-width: 120px;
+            max-width: 220px;
+        }
+
+        .c-licensenumber {
+            word-break: break-all;
+        }
+
+        /* Desktop: ย้ายปุ่ม TYPE ไปเป็นแถบแนวนอนด้านบน */
+        @media (min-width: 769px) {
+            .layout {
+                flex-direction: column;
+                gap: 0;
+            }
+
+            .sidebar {
+                width: 100%;
+                position: static;
+                display: flex;
+                align-items: center;
+                gap: 14px;
+                padding: 12px 16px;
+                margin-bottom: 20px;
+            }
+
+            .sidebar-title {
+                margin: 0 6px 0 0;
+                font-size: 18px;
+            }
+
+            #typeButtons {
+                display: flex;
+                gap: 10px;
+                flex: 1;
+            }
+
+            .type-btn {
+                width: auto;
+                min-width: 150px;
+                margin-bottom: 0;
+                gap: 14px;
+            }
+        }
+    </style>
+
+    <link rel="stylesheet" href="/css/site.css">
+    <script src="/js/auth.js"></script>
+   
+</head>
+
+<body>
+    <div id="navbar"></div>
+    <div class="container">
+
+
+
+      
+
+        <div class="layout">
+
+            <aside class="sidebar hidden" id="typeSidebar">
+                <div class="sidebar-title">TYPE</div>
+                <div id="typeButtons"></div>
+            </aside>
+
+            <main class="main">
+                <div class="card header-card">
+                    <div>
+                        <h2 class="page-title" id="pageTitle">Applications</h2>
+                        <p class="subtitle" id="subtitle">License Application Management</p>
+                    </div>
+                    <div id="traderArea" class="hidden">
+                        <a href="/application-create.html" class="btn-primary">+ New Application</a>
+                    </div>
+                </div>
+                <!-- Staff only: งานค้างวันนี้ -->
+                <div class="summary hidden" id="summary"></div>
+
+                <div class="card">
+                    <div class="filters">
+                        <div class="search-wide">
+                            <label for="txtSearch">Search</label>
+                            <input type="text" id="txtSearch" placeholder="TRID, company, status, license number...">
+                        </div>
+                        <div>
+                            <label for="selStatus">Status</label>
+                            <select id="selStatus"><option value="">All statuses</option></select>
+                        </div>
+                        <div>
+                            <label for="selType">Type</label>
+                            <select id="selType"><option value="">All types</option></select>
+                        </div>
+                        <div class="col-submit">
+                            <label for="subFrom">Submitted from</label>
+                            <input type="date" id="subFrom">
+                        </div>
+                        <div class="col-submit">
+                            <label for="subTo">Submitted to</label>
+                            <input type="date" id="subTo">
+                        </div>
+                        <div>
+                            <label for="appFrom">Approved from</label>
+                            <input type="date" id="appFrom">
+                        </div>
+                        <div>
+                            <label for="appTo">Approved to</label>
+                            <input type="date" id="appTo">
+                        </div>
+                    </div>
+
+                    <div class="toolbar">
+                        <div class="result-count" id="resultCount"></div>
+                        <div class="toolbar-actions">
+                            <button type="button" class="btn-ghost" id="btnClear">Clear filters</button>
+                            <button type="button" class="btn-ghost" id="btnExport">Export CSV</button>
+                        </div>
+                    </div>
+
+                    <div class="table-wrapper">
+                        <table>
+                            <thead id="theadApp"></thead>
+                            <tbody id="tbodyApp"></tbody>
+                        </table>
+                    </div>
+
+                    <div class="pager">
+                        <div class="result-count" id="pageInfo"></div>
+                        <div class="pager-nav">
+                            <label for="selPageSize" class="result-count">Rows</label>
+                            <select id="selPageSize">
+                                <option value="20" selected>20</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                            </select>
+                            <button type="button" id="btnPrev">Previous</button>
+                            <span id="pageNo" class="result-count"></span>
+                            <button type="button" id="btnNext">Next</button>
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+        </div>
+
+    </div>
+
+    <script src="/js/config.js"></script>
+    <script src="/js/applications.js"></script>
+     <script src="/js/layout.js"></script> 
+</body>
+</html>

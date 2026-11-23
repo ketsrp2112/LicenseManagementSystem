@@ -1,0 +1,630 @@
+﻿<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Application Detail</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 30px;
+            background: #f5f7fb;
+            font-family: Segoe UI, Arial, sans-serif;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: auto;
+        }
+
+        /* Main page layout */
+        .page-layout {
+            display: grid;
+            grid-template-columns: minmax(0, 3fr) minmax(300px, 1.15fr);
+            gap: 15px;
+            align-items: start;
+        }
+
+        /* Left side */
+        .detail-column {
+            min-width: 0;
+        }
+
+        /* Right side */
+        .action-column {
+            min-width: 0;
+            position: sticky;
+            top: 20px;
+        }
+
+        /* Action area */
+        .action-area {
+            border: 1px solid #dbeafe;
+            background: #eff6ff;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+            .action-area h3 {
+                margin-top: 0;
+            }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .page-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .action-column {
+                position: static;
+            }
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,.08);
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+
+        .header-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .page-title {
+            margin: 0;
+            color: #1f2937;
+        }
+
+        .status-badge {
+            background: #1976d2;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: bold;
+        }
+
+        h3 {
+            margin-top: 0;
+            color: #1f2937;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit,minmax(260px,1fr));
+            gap: 15px;
+        }
+
+        .info-item {
+            background: #f8fafc;
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+            .info-item label {
+                display: block;
+                color: #64748b;
+                font-size: 13px;
+                margin-bottom: 5px;
+            }
+
+        .info-value {
+            font-weight: 600;
+            color: #111827;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #1976d2;
+            color: white;
+            padding: 12px;
+        }
+
+        td {
+            border: 1px solid #e5e7eb;
+            padding: 10px;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+        }
+
+        textarea {
+            min-height: 90px;
+            resize: vertical;
+        }
+
+        .action-area {
+            border: 1px solid #dbeafe;
+            background: #eff6ff;
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .form-select,
+        select {
+            width: 100%;
+            min-width: 250px;
+        }
+
+        button {
+            background: #1976d2;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 18px;
+            cursor: pointer;
+        }
+
+            button:hover {
+                background: #125bb0;
+            }
+
+        .btn-danger {
+            background: #dc2626;
+        }
+
+            .btn-danger:hover {
+                background: #b91c1c;
+            }
+
+        .footer {
+            text-align: right;
+            margin-top: 20px;
+        }
+
+        .Detail-wrapper {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .ts-wrapper {
+            width: 100%;
+        }
+
+        .ts-control {
+            border: 1px solid #d1d5db !important;
+            border-radius: 6px !important;
+            min-height: 42px !important;
+            padding: 8px 12px !important;
+        }
+
+        .ts-dropdown {
+            border-radius: 6px !important;
+        }
+
+            .ts-dropdown .active {
+                background: #1976d2 !important;
+                color: white !important;
+            }
+
+        .ts-control input {
+            display: none !important;
+        }
+
+        #officerStatus {
+            width: 100%;
+            min-width: 300px;
+            height: auto !important;
+            padding: 10px 12px !important;
+            font-size: 14px !important;
+            line-height: 1.5 !important;
+            text-indent: 0 !important;
+        }
+
+            #officerStatus,
+            #officerStatus option {
+                font-size: 14px !important;
+            }
+
+        textarea[readonly] {
+            background: #f8fafc;
+            color: #374151;
+            cursor: default;
+        }
+
+        .file-link {
+            color: #1976d2;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+            .file-link:hover {
+                text-decoration: underline;
+            }
+
+        .btn-download {
+            background: #2e7d32;
+        }
+
+            .btn-download:hover {
+                background: #1b5e20;
+            }
+    </style>
+    <link rel="stylesheet" href="/css/site.css">
+    <script src="/js/auth.js"></script>
+    <script>checkLogin();</script>
+</head>
+
+<body>
+    <div id="navbar"></div>
+    <div class="container">
+
+        <!-- HEADER -->
+
+        <div class="page-layout">
+
+            <!-- ================================= -->
+            <!-- LEFT : APPLICATION DETAIL        -->
+            <!-- ================================= -->
+
+            <main class="detail-column">
+
+                <!-- HEADER -->
+                <div class="card header-card">
+
+                    <div>
+                        <h2 class="page-title">
+                            Application Detail
+                        </h2>
+
+                        <p>
+                            TRID :
+                            <strong id="trid"></strong>
+                        </p>
+                    </div>
+
+                    <div>
+                        <span id="statusname"
+                              class="status-badge">
+                        </span>
+                        <button type="button"
+                                id="btnCertificate"
+                                class="btn-download hidden"
+                                onclick="viewCertificate(trid)"
+                                style="margin-left:10px;">
+                            📄 View Certificate (PDF)
+                        </button>
+                    </div>
+
+                </div>
+
+
+
+                <!-- APPLICANT -->
+
+                <div class="card">
+
+                    <h3>Applicant Information</h3>
+
+                    <div class="info-grid">
+
+                        <div class="info-item">
+                            <label>Identify</label>
+                            <div id="identify" class="info-value"></div>
+                        </div>
+
+                        <div class="info-item">
+                            <label>Company Name</label>
+                            <div id="companyname" class="info-value"></div>
+                        </div>
+
+                        <div class="info-item">
+                            <label>Citizen Name</label>
+                            <div id="citizenname" class="info-value"></div>
+                        </div>
+
+                        <div class="info-item">
+                            <label>Citizen ID</label>
+                            <div id="citizenid" class="info-value"></div>
+                        </div>
+
+                        <div class="info-item">
+                            <label>License Number</label>
+                            <div id="licensenumber" class="info-value"></div>
+                        </div>
+
+                        <div class="info-item">
+                            <label>Telephone number</label>
+                            <div id="tel" class="info-value"></div>
+                        </div>
+
+                        <div class="info-item">
+                            <label>E-mail</label>
+                            <div id="email" class="info-value"></div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- APPLICATION -->
+
+
+                <div class="card">
+
+                    <h3>Application Information</h3>
+
+                    <div class="info-grid">
+
+                        <div class="info-item">
+                            <label>Type</label>
+                            <div id="typenm" class="info-value"></div>
+                        </div>
+
+                        <div class="info-item hidden" id="referenceLicenseRow">
+                            <label>ReferenceLicenseNumber</label>
+                            <div id="referencelicensenumber" class="info-value"></div>
+                        </div>
+
+                        <div class="info-item">
+                            <label>Approval Date</label>
+                            <div id="Dateappv" class="info-value"></div>
+                        </div>
+
+                        <div class="info-item">
+                            <label>Expiration Date</label>
+                            <div id="Dateexp" class="info-value"></div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <!-- PRODUCTS -->
+
+                <div class="card">
+
+                    <h3>Products</h3>
+
+                    <div class="Detail-wrapper">
+                        <table>
+
+                            <thead>
+
+                                <tr>
+                                    <th>RID</th>
+                                    <th>NEWCODE</th>
+                                    <th>Product Name</th>
+                                    <th>Model Name</th>
+                                    <th>Description</th>
+
+                                </tr>
+
+                            </thead>
+
+                            <tbody id="productBody">
+                            </tbody>
+
+                        </table>
+
+                    </div>
+                </div>
+
+
+                <!-- FILES -->
+
+                <div class="card">
+
+                    <h3>Supporting Documents</h3>
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th width="80">No.</th>
+
+                                <th>File Name</th>
+
+                                <th width="150">Action</th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody id="fileBody">
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+
+                <!--Revision History -->
+
+
+                <div class="card">
+
+                    <h3>Revision History</h3>
+
+                    <table>
+
+                        <thead>
+                            <tr>
+                                <th>Version</th>
+                                <th>Date</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="versionBody">
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+
+                <!-- HISTORY -->
+
+                <div class="card">
+
+                    <h3>Status History</h3>
+
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>statusname</th>
+                                <th>nameupdate</th>
+                                <th>remark</th>
+                                <th>dateupdate</th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody id="historyBody">
+                        </tbody>
+
+                    </table>
+
+
+
+                </div>
+
+                <!-- BACK BUTTON -->
+                <div class="footer">
+                    <button onclick="backPage()">
+                        ← Back
+                    </button>
+                </div>
+
+            </main>
+
+            <!-- ================================= -->
+            <!-- RIGHT : ACTION PANEL             -->
+            <!-- ================================= -->
+
+            <aside class="action-column">
+
+                <!-- STAFF AREA -->
+
+                <div id="staffArea"
+                     class="action-area hidden">
+
+                    <h3>Officer Review</h3>
+
+                    <label>Change Status</label>
+
+                    <br><br>
+
+                    <select id="officerStatus">
+
+                        <option value="3">Officer Review</option>
+                        <option value="4">Revision Required</option>
+                        <option value="7">Officer Rejected</option>
+                        <option value="8">Approved</option>
+
+                    </select>
+
+                    <br><br>
+
+                    <label>Officer Remark</label>
+
+                    <textarea id="officerRemark"></textarea>
+
+                    <br><br>
+
+                    <button onclick="saveStatus()">
+                        Save Status
+                    </button>
+
+                </div>
+
+
+                <!-- TRADER AREA -->
+
+                <div id="traderArea"
+                     class="action-area hidden">
+
+                    <h3>Applicant Action</h3>
+
+                    <div id="submitArea" class="hidden">
+
+                        <button onclick="submitApplication()">
+                            Submit Application
+                        </button>
+
+                    </div>
+
+                    <br>
+
+                    <div id="cancelArea">
+
+                        <button class="btn-danger"
+                                onclick="showCancel()">
+
+                            Cancel Application
+
+                        </button>
+
+                        <div id="cancelForm" class="hidden">
+
+                            <br>
+
+                            <textarea id="cancelRemark"
+                                      placeholder="Enter cancel remark">
+                        </textarea>
+
+                            <br><br>
+
+                            <button class="btn-danger"
+                                    onclick="confirmCancel()">
+
+                                Confirm Cancel
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </aside>
+
+        </div>
+
+    </div>
+
+
+
+
+
+    <script src="js/config.js"></script>
+    <script src="js/application-detail.js"></script>
+    <script src="/js/layout.js"></script>
+</body>
+</html>

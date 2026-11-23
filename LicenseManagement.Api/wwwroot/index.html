@@ -1,0 +1,929 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Submit, track and approve product license applications online.">
+    <title>License Management System</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%231976d2'/><path d='M10 9h12v14H10z' fill='none' stroke='white' stroke-width='2'/><path d='M13 14h6M13 18h4' stroke='white' stroke-width='2'/></svg>">
+
+    <style>
+        :root {
+            --ink: #172c46;
+            --text: #334155;
+            --muted: #64748b;
+            --line: #e2e8f0;
+            --bg: #f4f6f9;
+            --blue: #1976d2;
+            --blue-d: #125bb0;
+            --blue-l: #e3f2fd;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        :focus-visible {
+            outline: 2px solid var(--blue);
+            outline-offset: 3px;
+        }
+
+        svg {
+            flex-shrink: 0;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            background: #fff;
+            padding: 16px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,.04);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--ink);
+            font-size: 17px;
+            font-weight: 700;
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-user {
+            color: var(--muted);
+            font-size: 13px;
+            margin-right: 4px;
+        }
+
+        .btn {
+            display: inline-block;
+            text-align: center;
+            padding: 11px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            border: 1px solid transparent;
+            font-family: inherit;
+            transition: background .2s;
+        }
+
+        .btn-primary {
+            background: var(--blue);
+            color: #fff;
+            border-color: var(--blue);
+        }
+
+            .btn-primary:hover {
+                background: var(--blue-d);
+                border-color: var(--blue-d);
+            }
+
+        .btn-secondary {
+            background: #e2e8f0;
+            color: var(--text);
+            border-color: #e2e8f0;
+        }
+
+            .btn-secondary:hover {
+                background: #cbd5e1;
+            }
+
+        /* HERO */
+        .hero {
+            max-width: 1250px;
+            margin: auto;
+            padding: 80px 30px 70px;
+            display: grid;
+            grid-template-columns: 1fr 1.05fr;
+            gap: 56px;
+            align-items: center;
+        }
+
+            .hero h1 {
+                color: var(--ink);
+                font-size: 42px;
+                line-height: 1.22;
+                margin-bottom: 18px;
+            }
+
+            .hero p {
+                color: var(--muted);
+                font-size: 16px;
+                line-height: 1.8;
+                max-width: 520px;
+            }
+
+        .hero-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .audience {
+            margin-top: 22px;
+            font-size: 13px;
+            color: var(--muted);
+        }
+
+        /* Mock of real list */
+        .mock {
+            background: #fff;
+            border-radius: 14px;
+            box-shadow: 0 10px 35px rgba(0,0,0,.08);
+            overflow: hidden;
+        }
+
+        .mock-bar {
+            display: flex;
+            justify-content: space-between;
+            padding: 14px 18px;
+            border-bottom: 1px solid var(--line);
+            font-size: 13px;
+            color: var(--muted);
+        }
+
+            .mock-bar strong {
+                color: var(--ink);
+            }
+
+        .mock table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        .mock th {
+            text-align: left;
+            padding: 9px 14px;
+            background: var(--blue);
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .mock td {
+            padding: 11px 14px;
+            border-bottom: 1px solid #edf0f4;
+            border-left: 0;
+        }
+
+            .mock td:first-child {
+                border-left: 5px solid var(--bar);
+            }
+
+        .badge {
+            display: inline-block;
+            padding: 3px 11px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .b-sub {
+            background: #cffafe;
+            color: #0e7490;
+        }
+
+        .b-rev {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .b-edit {
+            background: #fef3c7;
+            color: #b45309;
+        }
+
+        .b-ok {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .b-no {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .b-draft {
+            background: #e5e7eb;
+            color: #374151;
+        }
+
+        /* SECTIONS */
+        .section {
+            padding: 64px 7%;
+        }
+
+            .section.white {
+                background: #fff;
+            }
+
+        .inner {
+            max-width: 1150px;
+            margin: auto;
+        }
+
+        .section h2 {
+            color: var(--ink);
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .lead {
+            color: var(--muted);
+            font-size: 15px;
+            line-height: 1.7;
+            max-width: 640px;
+            margin-bottom: 36px;
+        }
+
+        /* Request types */
+        .types {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+        }
+
+        .type {
+            background: #f8fafc;
+            border: 1px solid #edf0f4;
+            border-radius: 12px;
+            padding: 22px;
+        }
+
+            .type svg {
+                color: var(--blue);
+                margin-bottom: 14px;
+            }
+
+            .type h3 {
+                color: var(--ink);
+                font-size: 16px;
+                margin-bottom: 8px;
+            }
+
+            .type p {
+                font-size: 13px;
+                line-height: 1.7;
+                color: var(--muted);
+            }
+
+        /* Status path */
+        .path {
+            list-style: none;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 0;
+            margin-bottom: 26px;
+        }
+
+            .path li {
+                position: relative;
+                padding-top: 28px;
+                padding-right: 12px;
+            }
+
+                .path li::before {
+                    content: "";
+                    position: absolute;
+                    top: 8px;
+                    left: 0;
+                    right: 0;
+                    height: 2px;
+                    background: var(--line);
+                }
+
+                .path li::after {
+                    content: "";
+                    position: absolute;
+                    top: 2px;
+                    left: 0;
+                    width: 14px;
+                    height: 14px;
+                    border-radius: 50%;
+                    background: var(--c);
+                    border: 3px solid #fff;
+                    box-shadow: 0 0 0 1px var(--c);
+                }
+
+                .path li:last-child::before {
+                    right: 50%;
+                }
+
+            .path h3 {
+                font-size: 15px;
+                color: var(--ink);
+                margin-bottom: 6px;
+            }
+
+            .path p {
+                font-size: 13px;
+                color: var(--muted);
+                line-height: 1.6;
+            }
+
+        .path-note {
+            background: #fffbeb;
+            border-left: 4px solid #d97706;
+            padding: 14px 18px;
+            border-radius: 6px;
+            font-size: 14px;
+            line-height: 1.7;
+            color: #78350f;
+            max-width: 760px;
+        }
+
+        /* Roles */
+        .roles {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        .role {
+            background: #fff;
+            border-radius: 12px;
+            padding: 28px;
+            border-top: 4px solid var(--c);
+            box-shadow: 0 2px 8px rgba(0,0,0,.06);
+        }
+
+            .role h3 {
+                color: var(--ink);
+                font-size: 19px;
+                margin-bottom: 6px;
+            }
+
+            .role .who {
+                color: var(--muted);
+                font-size: 13px;
+                margin-bottom: 16px;
+            }
+
+            .role ul {
+                list-style: none;
+            }
+
+            .role li {
+                display: flex;
+                gap: 10px;
+                padding: 8px 0;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+
+                .role li svg {
+                    color: var(--c);
+                    margin-top: 3px;
+                }
+
+        /* Help band */
+        .help {
+            background: var(--ink);
+            color: #cbd5e1;
+            padding: 40px 7%;
+        }
+
+            .help .inner {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                gap: 24px;
+                flex-wrap: wrap;
+            }
+
+            .help h2 {
+                color: #fff;
+                font-size: 21px;
+                margin-bottom: 6px;
+            }
+
+            .help p {
+                font-size: 14px;
+                line-height: 1.7;
+            }
+
+            .help a.link {
+                color: #fff;
+                text-decoration: underline;
+            }
+
+        .footer {
+            background: #0f1f33;
+            color: #94a3b8;
+            text-align: center;
+            padding: 20px;
+            font-size: 12px;
+        }
+
+        @media (max-width: 900px) {
+            .hero {
+                grid-template-columns: 1fr;
+                gap: 36px;
+                padding-top: 50px;
+            }
+
+                .hero h1 {
+                    font-size: 34px;
+                }
+
+            .types {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .path {
+                grid-template-columns: 1fr;
+                gap: 22px;
+            }
+
+                .path li {
+                    padding: 0 0 0 30px;
+                }
+
+                    .path li::before {
+                        top: 0;
+                        bottom: -22px;
+                        left: 7px;
+                        right: auto;
+                        width: 2px;
+                        height: auto;
+                    }
+
+                    .path li:last-child::before {
+                        display: none;
+                    }
+
+                    .path li::after {
+                        top: 3px;
+                    }
+
+            .roles {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .navbar {
+                padding: 14px 20px;
+                flex-wrap: wrap;
+                gap: 12px;
+            }
+
+            .brand {
+                font-size: 14px;
+            }
+
+            .nav-actions {
+                width: 100%;
+            }
+
+                .nav-actions .btn {
+                    flex: 1;
+                    padding: 10px;
+                    font-size: 13px;
+                }
+
+            .hero {
+                padding: 40px 20px;
+            }
+
+                .hero h1 {
+                    font-size: 29px;
+                }
+
+            .hero-buttons .btn {
+                width: 100%;
+            }
+
+            .types {
+                grid-template-columns: 1fr;
+            }
+
+            .mock {
+                overflow-x: auto;
+            }
+
+                .mock table {
+                    min-width: 460px;
+                }
+
+            .section {
+                padding: 48px 20px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                transition: none !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="navbar">
+        <a href="/index.html" class="brand">
+            <svg width="28" height="28" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="7" fill="#1976d2" /><path d="M10 9h12v14H10z" fill="none" stroke="#fff" stroke-width="2" /><path d="M13 14h6M13 18h4" stroke="#fff" stroke-width="2" /></svg>
+            <span>License Management System</span>
+        </a>
+
+        <!-- ยังไม่ล็อกอิน -->
+        <div class="nav-actions" id="navGuest">
+            <a href="/login.html" class="btn btn-primary">Login</a>
+            <a href="/register.html" class="btn btn-secondary">Register</a>
+        </div>
+
+        <!-- ล็อกอินแล้ว -->
+        <div class="nav-actions hidden" id="navUser">
+            <span class="nav-user" id="navRole"></span>
+            <a href="/applications.html" class="btn btn-primary">Go to applications</a>
+            <button type="button" class="btn btn-secondary" id="btnLogout">Log out</button>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div>
+            <h1>Apply for product licenses online, from submission to approval</h1>
+            <p>Traders submit applications and documents, officers review them, and everyone can see exactly where each application stands.</p>
+
+            <div class="hero-buttons" id="heroGuest">
+                <a href="/login.html" class="btn btn-primary">Log in</a>
+                <a href="/register.html" class="btn btn-secondary">Create a trader account</a>
+            </div>
+            <div class="hero-buttons hidden" id="heroUser">
+                <a href="/applications.html" class="btn btn-primary">Go to applications</a>
+            </div>
+
+            <p class="audience">For registered traders and regulatory officers.</p>
+        </div>
+
+        <!-- ตัวอย่างหน้ารายการคำขอ (ข้อมูลสมมติ) -->
+        <div class="mock" aria-label="Example of the applications list">
+            <div class="mock-bar"><strong>Applications</strong><span>Example data</span></div>
+            <table>
+                <thead><tr><th>TRID</th><th>Type</th><th>Status</th><th>License</th></tr></thead>
+                <tbody>
+                    <tr><td style="--bar:#0891b2">TR256911140001</td><td>Amendment</td><td><span class="badge b-sub">Submitted</span></td><td></td></tr>
+                    <tr><td style="--bar:#2563eb">TR256911140003</td><td>Renew</td><td><span class="badge b-rev">Officer Review</span></td><td></td></tr>
+                    <tr><td style="--bar:#d97706">TR256911130004</td><td>New License</td><td><span class="badge b-edit">Revision Required</span></td><td></td></tr>
+                    <tr><td style="--bar:#16a34a">TR256911130002</td><td>New License</td><td><span class="badge b-ok">Approved</span></td><td>LIC256911140001</td></tr>
+                    <tr><td style="--bar:#dc2626">TR256911120002</td><td>Cancel</td><td><span class="badge b-no">Cancelled</span></td><td></td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="section white">
+        <div class="inner">
+            <h2>Four kinds of application</h2>
+            <p class="lead">Pick the one that matches what you need to do with your license.</p>
+            <div class="types">
+                <div class="type">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg>
+                    <h3>New License</h3>
+                    <p>Register products and apply for a license for the first time.</p>
+                </div>
+                <div class="type">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.3-5.6M20 4v4h-4" /></svg>
+                    <h3>Renew</h3>
+                    <p>Extend an existing license before it expires.</p>
+                </div>
+                <div class="type">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16zM13 7l4 4" /></svg>
+                    <h3>Amendment</h3>
+                    <p>Change details or products on a license that is already approved.</p>
+                </div>
+                <div class="type">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M5.6 5.6l12.8 12.8" /></svg>
+                    <h3>Cancel</h3>
+                    <p>Withdraw a license you no longer need. The license is marked as cancelled.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="inner">
+            <h2>Know where your application is</h2>
+            <p class="lead">Every application has a clear status, visible to both traders and officers.</p>
+
+            <ol class="path">
+                <li style="--c:#9ca3af"><h3>Draft</h3><p>Trader prepares the application and attaches documents.</p></li>
+                <li style="--c:#0891b2"><h3>Submitted</h3><p>Sent to the authority and waiting to be picked up.</p></li>
+                <li style="--c:#2563eb"><h3>Officer Review</h3><p>An officer checks the details and documents.</p></li>
+                <li style="--c:#7c3aed"><h3>Decision</h3><p>The officer approves or rejects the application.</p></li>
+                <li style="--c:#16a34a"><h3>Approved</h3><p>A license number is issued and the certificate is available.</p></li>
+            </ol>
+
+            <p class="path-note">If something is missing, the officer sends the application back as <strong>Revision Required</strong>. The trader fixes it and submits again, and it returns to review.</p>
+        </div>
+    </section>
+
+    <section class="section white">
+        <div class="inner">
+            <h2>What you can do in the system</h2>
+            <p class="lead">Each account sees only the tools it needs.</p>
+            <div class="roles">
+                <div class="role" style="--c:#1976d2">
+                    <h3>Traders / Applicant</h3>
+                    <p class="who">Companies applying for or holding a license</p>
+                    <ul>
+                        <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10" /></svg>Create applications and save them as drafts</li>
+                        <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10" /></svg>Edit and resubmit when an officer asks for changes</li>
+                        <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10" /></svg>Search and follow every application by status</li>
+                        <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10" /></svg>View the certificate once the license is approved</li>
+                    </ul>
+                </div>
+                <div class="role" style="--c:#ea580c">
+                    <h3>Regulatory officers / Staff</h3>
+                    <p class="who">Staff who review and decide</p>
+                    <ul>
+                        <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10" /></svg>See a summary of pending work and overdue applications</li>
+                        <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10" /></svg>Filter by status, type and date, and sort by waiting time</li>
+                        <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10" /></svg>Verify documents, then approve, reject or request changes</li>
+                        <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10" /></svg>Export the filtered list to CSV for reports</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+
+
+    <!-- ===================== [1] CSS ===================== -->
+    <style>
+        /* DOCUMENTS (การ์ดดาวน์โหลดเอกสาร) */
+        .section.docs {
+            background: #fff8f8;
+        }
+
+        .docs-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+
+        .doc-card {
+            display: flex;
+            flex-direction: column;
+            background: #fff;
+            border: 1px solid #efe3e6;
+            border-radius: 14px;
+            padding: 22px;
+            transition: box-shadow .2s, transform .2s, border-color .2s;
+        }
+
+            .doc-card:hover {
+                border-color: #e2c6cf;
+                box-shadow: 0 8px 22px rgba(120, 60, 80, .10);
+                transform: translateY(-2px);
+            }
+
+        .doc-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 9px;
+            background: #f7e9ee;
+            color: #9a5b70;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            margin-bottom: 18px;
+        }
+
+        .doc-card h3 {
+            font-size: 15px;
+            color: #2b2527;
+            margin-bottom: 10px;
+        }
+
+        .doc-card p {
+            font-size: 13.5px;
+            line-height: 1.7;
+            color: #7b7377;
+            margin-bottom: 18px;
+        }
+
+        .doc-link {
+            margin-top: auto; /* ดันลิงก์ลงล่างสุดของการ์ด ให้เรียงแนวเดียวกัน */
+            font-size: 13.5px;
+            font-weight: 700;
+            color: #9a5b70;
+        }
+
+        .doc-card.loading {
+            cursor: progress;
+            opacity: .75;
+            pointer-events: none;
+        }
+
+        .doc-card.failed .doc-link {
+            color: #c62828;
+        }
+
+        @media (max-width: 900px) {
+            .docs-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .docs-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+
+    <!-- ===================== [2] HTML ===================== -->
+    <section class="section" id="docs">
+        <div class="inner">
+            <h2>Documentation</h2>
+            <p class="lead">Download the project documents as PDF.</p>
+
+            <div class="docs-grid">
+
+                <a class="doc-card" href="/api/docs/pdf/System_Architecture" data-doc="System_Architecture">
+                    <div class="doc-icon" aria-hidden="true">&#8984;</div>
+                    <h3>System Architecture</h3>
+                    <p>Overview of the application structure, main components, and how they work together.</p>
+                    <span class="doc-link">View document &#8599;</span>
+                </a>
+
+                <a class="doc-card" href="/api/docs/pdf/Business_Workflow" data-doc="Business_Workflow">
+                    <div class="doc-icon" aria-hidden="true">&#8599;</div>
+                    <h3>Business Workflow</h3>
+                    <p>Application processes, user roles, and status transitions throughout the workflow.</p>
+                    <span class="doc-link">View document &#8599;</span>
+                </a>
+
+                <a class="doc-card" href="/api/docs/pdf/Database_Design" data-doc="Database_Design">
+                    <div class="doc-icon" aria-hidden="true">&#9638;</div>
+                    <h3>Database Design</h3>
+                    <p>Database tables, key relationships, and the data structure supporting the system.</p>
+                    <span class="doc-link">View document &#8599;</span>
+                </a>
+
+                <a class="doc-card" href="/api/docs/pdf/API_Documentation" data-doc="API_Documentation">
+                    <div class="doc-icon" aria-hidden="true">{&nbsp;}</div>
+                    <h3>API Documentation</h3>
+                    <p>API endpoints and technical references for communication between the frontend and backend.</p>
+                    <span class="doc-link">View document &#8599;</span>
+                </a>
+
+                <a class="doc-card" href="/api/docs/pdf/User_Manual" data-doc="User_Manual">
+                    <div class="doc-icon" aria-hidden="true">&#9636;</div>
+                    <h3>User Manual</h3>
+                    <p>Guidance for using the system and navigating its main functions.</p>
+                    <span class="doc-link">View document &#8599;</span>
+                </a>
+
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ===================== [3] JS ===================== -->
+    <script>
+                    (function () {
+                        // ===== ปรับได้ =====
+                        const OPEN_IN_NEW_TAB = false;   // true = เปิดดู PDF ในแท็บใหม่, false = ดาวน์โหลดไฟล์
+                        const getHeaders = () => {
+                            // ถ้าภายหลังเพิ่มการตรวจ session ที่ API ให้แก้ชื่อ key ให้ตรงกับที่หน้า login เก็บ token
+                            const t = localStorage.getItem("sessionToken");
+                            return t ? { "X-Session-Token": t } : {};
+                        };
+                        // ===================
+
+                        function fileNameFrom(res, fallback) {
+                            const cd = res.headers.get("Content-Disposition") || "";
+                            const star = /filename\*=UTF-8''([^;]+)/i.exec(cd);
+                            if (star) return decodeURIComponent(star[1]);
+                            const plain = /filename="?([^";]+)"?/i.exec(cd);
+                            return plain ? plain[1] : fallback;
+                        }
+
+                        async function downloadDoc(card) {
+                            const link = card.querySelector(".doc-link");
+                            const original = link.innerHTML;
+                            const name = card.dataset.doc;
+
+                            card.classList.remove("failed");
+                            card.classList.add("loading");
+                            link.textContent = "Generating PDF…";
+
+                            try {
+                                const res = await fetch(card.getAttribute("href"), { headers: getHeaders() });
+                                if (!res.ok) throw new Error("HTTP " + res.status);
+
+                                const blob = await res.blob();
+                                const url = URL.createObjectURL(blob);
+
+                                if (OPEN_IN_NEW_TAB) {
+                                    window.open(url, "_blank");
+                                } else {
+                                    const a = document.createElement("a");
+                                    a.href = url;
+                                    a.download = fileNameFrom(res, name + ".pdf");
+                                    document.body.appendChild(a);
+                                    a.click();
+                                    a.remove();
+                                }
+                                setTimeout(() => URL.revokeObjectURL(url), 15000);
+                                link.innerHTML = original;
+                            } catch (err) {
+                                console.error(err);
+                                card.classList.add("failed");
+                                link.textContent = "Failed — click to retry";
+                            } finally {
+                                card.classList.remove("loading");
+                            }
+                        }
+
+                        document.querySelectorAll(".doc-card[data-doc]").forEach(function (card) {
+                            card.addEventListener("click", function (e) {
+                                e.preventDefault();          // ถ้า JS ไม่ทำงาน ลิงก์ href จะดาวน์โหลดตรงๆ แทน
+                                downloadDoc(card);
+                            });
+                        });
+                    })();
+    </script>
+
+
+    <section class="help">
+        <div class="inner">
+            <div>
+                <h2>Need help with an application?</h2>
+
+                <p>Contact the licensing office: <a class="link" href="mailto:ketsrp.21@gmail.com">ketsrp.21@gmail.com</a> </p>
+            </div>
+            <a href="/register.html" class="btn btn-primary" id="helpCta">Create a trader account</a>
+        </div>
+    </section>
+
+    <footer class="footer">
+        &copy; <span id="year"></span> License Management System
+    </footer>
+
+    <script>
+                                        // ถ้าล็อกอินอยู่แล้ว เปลี่ยนปุ่มแทนการ redirect
+                                        (function () {
+                                            const loggedIn = !!localStorage.getItem("identify");
+                                            const role = localStorage.getItem("userType");
+
+                                            document.getElementById("year").textContent = new Date().getFullYear();
+
+                                            if (!loggedIn) return;
+
+                                            document.getElementById("navGuest").classList.add("hidden");
+                                            document.getElementById("heroGuest").classList.add("hidden");
+                                            document.getElementById("navUser").classList.remove("hidden");
+                                            document.getElementById("heroUser").classList.remove("hidden");
+                                            document.getElementById("helpCta").classList.add("hidden");
+
+                                            if (role) {
+                                                document.getElementById("navRole").textContent =
+                                                    role === "Staff" ? "Signed in as officer" : "Signed in as trader";
+                                            }
+
+                                            document.getElementById("btnLogout").addEventListener("click", function () {
+                                                localStorage.clear();
+                                                window.location.reload();
+                                            });
+                                        })();
+    </script>
+
+</body>
+</html>

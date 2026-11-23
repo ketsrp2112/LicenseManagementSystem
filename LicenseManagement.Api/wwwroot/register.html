@@ -1,0 +1,350 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account | License Management System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: #f4f6f9;
+            min-height: 100vh;
+            color: #334155;
+        }
+
+        :focus-visible {
+            outline: 2px solid #1976d2;
+            outline-offset: 2px;
+        }
+
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        .hero-card {
+            max-width: 850px;
+            width: 100%;
+            background: #fff;
+            border-radius: 16px;
+            padding: 45px 55px;
+            box-shadow: 0 10px 30px rgba(0,0,0,.08);
+        }
+
+        .logo {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 12px;
+        }
+
+        .page-title {
+            text-align: center;
+            color: #172c46;
+            font-size: 30px;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #64748b;
+            font-size: 15px;
+            margin-bottom: 20px;
+        }
+
+        .notice {
+            background: #fffbeb;
+            border-left: 4px solid #d97706;
+            color: #78350f;
+            padding: 12px 16px;
+            border-radius: 6px;
+            font-size: 13px;
+            line-height: 1.6;
+            margin-bottom: 28px;
+        }
+
+        .section-title {
+            color: #172c46;
+            font-size: 17px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .form-section {
+            margin-bottom: 28px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+            .form-group label {
+                font-size: 14px;
+                font-weight: 600;
+            }
+
+        .required {
+            color: #dc3545;
+        }
+
+        .hint {
+            color: #64748b;
+            font-size: 12px;
+        }
+
+        .form-control {
+            width: 100%;
+            height: 44px;
+            padding: 10px 13px;
+            border: 1px solid #cbd5e1;
+            border-radius: 7px;
+            background: #fff;
+            font-family: inherit;
+            font-size: 14px;
+            color: #334155;
+            transition: .2s;
+        }
+
+            .form-control:focus {
+                outline: none;
+                border-color: #1976d2;
+                box-shadow: 0 0 0 3px rgba(25,118,210,.12);
+            }
+
+            .form-control[aria-invalid="true"] {
+                border-color: #dc2626;
+            }
+
+            .form-control::placeholder {
+                color: #94a3b8;
+            }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        .pw {
+            position: relative;
+        }
+
+            .pw .form-control {
+                padding-right: 65px;
+            }
+
+        .toggle-password {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #1976d2;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .message {
+            display: none;
+            padding: 12px 15px;
+            border-radius: 7px;
+            margin-top: 20px;
+            font-size: 14px;
+            background: #fef2f2;
+            color: #b91c1c;
+        }
+
+            .message.show {
+                display: block;
+            }
+
+            .message.success {
+                background: #f0fdf4;
+                color: #15803d;
+            }
+
+        .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            min-width: 140px;
+            text-decoration: none;
+            text-align: center;
+            padding: 13px 28px;
+            border: none;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: .3s;
+        }
+
+        .btn-primary {
+            background: #1976d2;
+            color: #fff;
+        }
+
+            .btn-primary:hover {
+                background: #125bb0;
+            }
+
+            .btn-primary:disabled {
+                background: #94a3b8;
+                cursor: not-allowed;
+            }
+
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #334155;
+        }
+
+            .btn-secondary:hover {
+                background: #cbd5e1;
+            }
+
+        .footer {
+            margin-top: 35px;
+            padding-top: 20px;
+            border-top: 1px solid #e2e8f0;
+            text-align: center;
+            color: #94a3b8;
+            font-size: 12px;
+        }
+
+        @media (max-width: 768px) {
+            .hero-card {
+                padding: 30px 22px;
+            }
+
+            .page-title {
+                font-size: 24px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .full-width {
+                grid-column: auto;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="hero">
+        <div class="hero-card">
+
+            <div class="logo">
+                <svg width="44" height="44" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="7" fill="#1976d2" /><path d="M10 9h12v14H10z" fill="none" stroke="#fff" stroke-width="2" /><path d="M13 14h6M13 18h4" stroke="#fff" stroke-width="2" /></svg>
+            </div>
+            <h1 class="page-title">Create trader account</h1>
+            <p class="subtitle">Register to submit and track license applications.</p>
+
+            <p class="notice">This is a demo system. Please use sample data, not your real ID number or contact details. Officer accounts are created by the system owner.</p>
+
+            <form id="registerForm" novalidate>
+
+                <div class="form-section">
+                    <h2 class="section-title">Account information</h2>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="fullname">Full name <span class="required">*</span></label>
+                            <input type="text" id="fullname" class="form-control" placeholder="Enter full name" autocomplete="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="username">Username <span class="required">*</span></label>
+                            <input type="text" id="username" class="form-control" placeholder="Enter username" autocomplete="username" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password <span class="required">*</span></label>
+                            <div class="pw">
+                                <input type="password" id="password" class="form-control" placeholder="Enter password" autocomplete="new-password" required>
+                                <button type="button" class="toggle-password" data-target="password">Show</button>
+                            </div>
+                            <span class="hint">At least 8 characters, with uppercase, lowercase and a number.</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="confirmPassword">Confirm password <span class="required">*</span></label>
+                            <div class="pw">
+                                <input type="password" id="confirmPassword" class="form-control" placeholder="Re-enter password" autocomplete="new-password" required>
+                                <button type="button" class="toggle-password" data-target="confirmPassword">Show</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h2 class="section-title">Personal and company information</h2>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="citizenId">Citizen ID <span class="required">*</span></label>
+                            <input type="text" id="citizenId" class="form-control" maxlength="13" inputmode="numeric" placeholder="13 digits" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="identify">Identify <span class="required">*</span></label>
+                            <input type="text" id="identify" class="form-control" maxlength="13" inputmode="numeric" placeholder="13 digits" required>
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="companyName">Company name <span class="required">*</span></label>
+                            <input type="text" id="companyName" class="form-control" placeholder="Enter company name" autocomplete="organization" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="tel">Telephone <span class="required">*</span></label>
+                            <input type="tel" id="tel" class="form-control" maxlength="11" inputmode="numeric" placeholder="e.g. 01099999999" autocomplete="tel" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email <span class="required">*</span></label>
+                            <input type="email" id="email" class="form-control" placeholder="example@company.com" autocomplete="email" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="registerMessage" class="message" role="alert"></div>
+
+                <div class="button-group">
+                    <a href="login.html" class="btn btn-secondary">Back to login</a>
+                    <button type="reset" class="btn btn-secondary">Reset</button>
+                    <button type="submit" class="btn btn-primary" id="registerButton">Create account</button>
+                </div>
+            </form>
+
+            <div class="footer">&copy; <span id="year"></span> License Management System</div>
+        </div>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/register.js"></script>
+</body>
+</html>
